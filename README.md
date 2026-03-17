@@ -1,59 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+This looks like a solid foundation, but we need to update it to reflect our recent technical decisions—specifically the move to **TypeScript**, the **Axios** integration, and the fact that we moved the joke rendering to the **Client-Side**.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+I’ve also updated the "Features" section to reflect the removal of the password/middleware (per your request) and to highlight the modern tech stack.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Laravel Joke Challenge
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This project is a high-performance Laravel application that fetches programming jokes from an external API. It was built for the Latus Group technical assessment, featuring a decoupled architecture with a TypeScript-powered frontend and a robust Service Layer backend.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Setup Instructions
 
-## Learning Laravel
+The project is fully dockerized. To get everything running, follow these steps:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+1.  **To start:**
+    ```
+    git clone git@github.com:markmarilag27/laravel-mvc-jokes.git
+    cd laravel-mvc-jokes
+    cp .env.example .env
+    docker compose build app
+    ```
+2.  **Start the containers:**
+    ```
+    bash ./run-start-container.sh
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3.  **Open the container shell:**
+    ```
+    bash ./run-ssh-container.sh
+    ```
 
-## Laravel Sponsors
+4.  **Run the setup command:**
+    Inside the container, run the automated setup script to handle dependencies, environment keys, and migrations:
+    ```
+    composer install
+    php artisan key:generate
+    php artisan migrate
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5.  **Compile Assets:**
+    Since the UI uses TypeScript, ensure the assets are compiled:
+    ```
+    bun install && bun run build
+    ```
 
-### Premium Partners
+Once finished, the app will be live at `http://localhost`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Features
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* **Service Layer Architecture:** Uses a `JokeService` with Data Transfer Objects (DTOs) to ensure data integrity and thin controllers.
+* **TypeScript Frontend:** The UI is built with **TypeScript** and **Axios**, providing a type-safe, SPA-like experience for fetching and rendering jokes.
+* **Dynamic Refresh:** A "Refresh" button allows users to fetch 3 new jokes without a full page reload, hitting the internal API endpoint.
+* **REST API:** A dedicated `GET /api/jokes` endpoint is available, returning structured JSON with configurable limits.
+* **Code Quality:** Strictly linted using **Laravel Pint** to ensure PSR-12 compliance.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## How to Run Tests
 
-## Security Vulnerabilities
+The application follows TDD principles. I used **Mockery** to stub external API calls, ensuring the test suite is fast, deterministic, and independent of external service uptime.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Run the tests inside the container using:
+```bash
+composer test
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Other Useful Commands
+
+* **Shut down the project:** `bash ./run-stop-container.sh`
+* **Fix code styling:** `composer fix-style` (runs Laravel Pint)
+* **Watch Assets:** `bun run dev` (for real-time TypeScript/Tailwind compilation)
+
