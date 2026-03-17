@@ -26,7 +26,7 @@ class GetJokeController extends Controller
         $resource = $this->jokeService->getJokes(limit: $limit);
 
         return response()->json([
-            'data' => $resource
+            'data' => $resource,
         ]);
     }
 }

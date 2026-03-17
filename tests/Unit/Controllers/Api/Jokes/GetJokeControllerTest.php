@@ -7,12 +7,13 @@ namespace Tests\Unit\Controllers\Api\Jokes;
 use App\DTOs\JokeData;
 use App\Http\Controllers\Api\Jokes\GetJokeController;
 use App\Services\JokeService;
-use Tests\TestCase;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
 class GetJokeControllerTest extends TestCase
 {
     private string $endpoint;
+
     private int $limit = 3;
 
     protected function setUp(): void
@@ -41,8 +42,8 @@ class GetJokeControllerTest extends TestCase
             ->assertJsonCount($this->limit, 'data')
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'setup', 'punchline', 'type']
-                ]
+                    '*' => ['id', 'setup', 'punchline', 'type'],
+                ],
             ]);
     }
 
@@ -57,7 +58,7 @@ class GetJokeControllerTest extends TestCase
                 ->andReturn(collect()->pad($customLimit, new JokeData(1, 'type', 's', 'p')));
         });
 
-        $response = $this->getJson($this->endpoint . "?limit={$customLimit}");
+        $response = $this->getJson($this->endpoint."?limit={$customLimit}");
 
         $response->assertStatus(200)
             ->assertJsonCount($customLimit, 'data');
@@ -86,7 +87,7 @@ class GetJokeControllerTest extends TestCase
                 ->andReturn(collect());
         });
 
-        $this->getJson($this->endpoint . '?limit=5');
+        $this->getJson($this->endpoint.'?limit=5');
     }
 
     public function test_it_handles_invalid_string_limit_as_zero(): void
@@ -98,6 +99,6 @@ class GetJokeControllerTest extends TestCase
                 ->andReturn(collect());
         });
 
-        $this->getJson($this->endpoint . '?limit=invalid-string');
+        $this->getJson($this->endpoint.'?limit=invalid-string');
     }
 }
