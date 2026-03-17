@@ -1,12 +1,6 @@
-This looks like a solid foundation, but we need to update it to reflect our recent technical decisions—specifically the move to **TypeScript**, the **Axios** integration, and the fact that we moved the joke rendering to the **Client-Side**.
-
-I’ve also updated the "Features" section to reflect the removal of the password/middleware (per your request) and to highlight the modern tech stack.
-
----
-
 # Laravel Joke Challenge
 
-This project is a high-performance Laravel application that fetches programming jokes from an external API. It was built for the Latus Group technical assessment, featuring a decoupled architecture with a TypeScript-powered frontend and a robust Service Layer backend.
+This project is a high-performance Laravel application that fetches programming jokes from an external API. It was built for the technical assessment, featuring a decoupled architecture with a TypeScript-powered frontend and a robust Service Layer backend.
 
 ## Setup Instructions
 
